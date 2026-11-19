@@ -1,0 +1,200 @@
+# ============================================================================
+#  IvalonaTutoriel - configuration
+#
+#  TEXTES : tout est modifiable ici et dans messages.yml
+#   - Couleurs Minecraft : &c &b &a &6 ... &l (gras) &o &n &m &r  et hex : &#ff8800
+#   - MiniMessage : <gradient:gold:yellow>texte</gradient>, <bold>, <click:...>
+#   - Glyphs Nexo : <glyph:dollars1>
+#   - PlaceholderAPI : %player_name% ... fonctionne dans tous les textes
+#   - Variables : {player} {number} {total} {title} {description} {reward} {amount}
+#
+#  PLACEHOLDERS pour CustomNamePlates (bossbar) : voir le README
+#     %tutoriel_quest%   texte complet de la quete en cours
+#     %tutoriel_active%  true / false
+#     %tutoriel_step%    numero de la quete en cours (0 = pas commence, 11 = termine)
+# ============================================================================
+
+tutorial:
+  # true : seuls les nouveaux joueurs (jamais connectes) font le tutoriel
+  only-new-players: true
+  # delai minimum (ticks) apres la connexion avant la cinematique
+  start-delay-ticks: 60
+  # attendre que le resource pack (Nexo) soit charge avant la cinematique
+  wait-for-resource-pack: true
+  # ...mais pas plus longtemps que ca (ticks) si aucune reponse du client
+  resource-pack-timeout-ticks: 300
+  # delai (ticks) entre "quete terminee" et l'annonce de la quete suivante
+  next-quest-delay-ticks: 60
+  # true : verifie que la commande existe et que le joueur a la permission (peut poser souci
+  # avec des commandes enregistrees autrement que par Bukkit)
+  verify-command-exists: false
+  # temps (ticks) pour etre teleporte apres /warp pour que ca compte
+  warp-window-ticks: 400
+
+# Bossbar : par defaut le texte est fourni a CustomNamePlates via %tutoriel_quest%.
+# Si tu veux une bossbar simple sans CustomNamePlates, mets native-enabled: true
+bossbar:
+  # format de %tutoriel_quest% et de la bossbar native
+  # variables : {number} {total} {title} {description} {bossbar} {reward} {amount}
+  format: "&6✦ Tutoriel &8[&e{number}&7/&e{total}&8] &f{bossbar}"
+  native-enabled: false
+  color: YELLOW        # PINK BLUE RED GREEN YELLOW PURPLE WHITE
+  overlay: PROGRESS    # PROGRESS NOTCHED_6 NOTCHED_10 NOTCHED_12 NOTCHED_20
+
+completion:
+  # feux d'artifice a la fin du tutoriel (0 = aucun)
+  fireworks: 6
+  # commandes console a la fin du tutoriel (LuckPerms, Essentials, items...). Variable : {player}
+  # exemple : - "lp user {player} permission set tutoriel.termine true"
+  commands: []
+
+# ============================================================================
+#  CINEMATIQUE
+#  Par defaut : une spirale descendante autour du spawn (ou du centre defini avec
+#  /tutoriel cinematic setcenter), avec lever de soleil, musique, titres, feux d'artifice
+#  et colonnes de particules. Pour un parcours sur mesure : place-toi, regarde ou tu veux
+#  et tape /tutoriel cinematic addpoint <secondes> (au moins 2 points).
+#  Test : /tutoriel cinematic preview
+# ============================================================================
+cinematic:
+  enabled: true
+  allow-skip: true               # /tutoriel skip pendant la cinematique
+  camera-entity: ITEM_DISPLAY    # ITEM_DISPLAY (fluide) ou ARMOR_STAND (si souci)
+  teleport-duration: 2           # lissage de la camera (ticks)
+  world: ""                      # monde du centre si non defini (vide = monde principal)
+  # ou le joueur arrive apres la cinematique : "monde,x,y,z,yaw,pitch" (vide = son point d'arrivee)
+  end-location: ""
+  # commandes console apres la cinematique, ex : - "essentials:spawn {player}"
+  end-commands: []
+
+  auto-path:
+    duration-seconds: 34
+    radius-start: 70
+    radius-end: 14
+    height-start: 65
+    height-end: 9
+    turns: 1.25
+    look-offset-y: 3
+    start-angle: 0
+
+  # Evenements. "at" = seconde. Types :
+  #  TITLE      title, subtitle, fade-in, stay, fade-out (ticks)
+  #  ACTIONBAR  text          MESSAGE  text
+  #  SOUND      sound: "cle;volume;pitch"  (sons Nexo : "ivalona:musique.intro;1;1")
+  #  STOP_SOUND
+  #  TIME       time (ticks, heure vue par le joueur : 0 matin, 6000 midi, 13000 nuit)
+  #  EFFECT     effect (blindness, darkness...), duration (ticks)  -> fondu au noir
+  #  FIREWORK   count, radius, height, colors: [GOLD, AQUA, #ff00aa]
+  #  PARTICLES  particle, shape (RING SPIRAL COLUMN BURST), points, radius, height, offset-y,
+  #             speed, duration (secondes)
+  #  COMMAND    command (console, {player})
+  timeline:
+    - {at: 0, type: TIME, time: 22600}
+    - {at: 0, type: EFFECT, effect: blindness, duration: 50}
+    - {at: 0, type: SOUND, sound: "minecraft:block.beacon.activate;1.0;0.6"}
+    - {at: 0, type: SOUND, sound: "minecraft:music_disc.pigstep;0.6;1.0"}
+    - {at: 1.5, type: TITLE, title: "&6&l✦ IVALONA ✦", subtitle: "&7Un monde, une aventure...", fade-in: 20, stay: 70, fade-out: 20}
+    - {at: 3, type: PARTICLES, particle: end_rod, shape: SPIRAL, points: 30, radius: 3, height: 60, duration: 12}
+    - {at: 7, type: SOUND, sound: "minecraft:ui.toast.challenge_complete;1.0;1.0"}
+    - {at: 8, type: FIREWORK, count: 5, radius: 22, height: 18, colors: [GOLD, ORANGE, YELLOW]}
+    - {at: 10, type: TITLE, title: "&eBienvenue, &f{player} &e!", subtitle: "&7Prepare-toi a vivre une aventure unique", fade-in: 20, stay: 60, fade-out: 20}
+    - {at: 14, type: PARTICLES, particle: flame, shape: RING, points: 48, radius: 10, offset-y: 1, duration: 6}
+    - {at: 15, type: FIREWORK, count: 6, radius: 24, height: 20, colors: [RED, ORANGE, WHITE]}
+    - {at: 18, type: TITLE, title: "&b&lConstruis ton ile", subtitle: "&7OneBlock &8• &7Jobs &8• &7Quetes &8• &7Rangs", fade-in: 20, stay: 60, fade-out: 20}
+    - {at: 20, type: FIREWORK, count: 8, radius: 26, height: 22, colors: [AQUA, WHITE, BLUE]}
+    - {at: 24, type: SOUND, sound: "minecraft:entity.player.levelup;1.0;0.8"}
+    - {at: 25, type: PARTICLES, particle: end_rod, shape: BURST, points: 25, radius: 14, offset-y: 6, duration: 4}
+    - {at: 26, type: TITLE, title: "&a&lPrepare-toi !", subtitle: "&7Ton aventure commence maintenant", fade-in: 10, stay: 50, fade-out: 20}
+    - {at: 26, type: FIREWORK, count: 14, radius: 28, height: 20, colors: [GOLD, LIME, AQUA, FUCHSIA, WHITE]}
+    - {at: 30, type: EFFECT, effect: blindness, duration: 70}
+
+# ============================================================================
+#  QUETES (dans l'ordre). Une quete est terminee quand TOUTES ses conditions sont remplies.
+#   COMMAND : commands = prefixes de commande acceptes (sans /), min-args = arguments en plus
+#   VOTE    : le joueur a vote (Votifier / NuVotifier, ou /tutoriel vote <joueur>)
+#   WARP    : commande de warp puis teleportation effective
+#   reward  : montant verse via Vault.   reward-commands : commandes console en plus.
+#   title / description / bossbar : textes (couleurs & et glyphs OK)
+# ============================================================================
+quests:
+  - id: ile
+    title: "&eCree ton ile"
+    description: "Fais &6/oneblock create (nom) &7pour creer ton ile OneBlock."
+    bossbar: "Cree ton ile avec &e/oneblock create (nom)"
+    reward: 5000
+    reward-commands: []
+    conditions:
+      - {type: COMMAND, commands: ["oneblock create", "ob create"], min-args: 1, delay-ticks: 40}
+
+  - id: menu
+    title: "&eOuvre le menu"
+    description: "Fais &6/menu &7pour decouvrir le menu du serveur."
+    bossbar: "Ouvre le menu avec &e/menu"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["menu"]}
+
+  - id: vote
+    title: "&eVote pour le serveur"
+    description: "Fais &6/vote &7puis vote une fois pour soutenir Ivalona."
+    bossbar: "Vote pour le serveur avec &e/vote"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["vote"]}
+      - {type: VOTE}
+
+  - id: jobs
+    title: "&eDecouvre les metiers"
+    description: "Fais &6/jobs &7pour choisir tes metiers."
+    bossbar: "Decouvre les metiers avec &e/jobs"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["jobs"]}
+
+  - id: quete
+    title: "&eConsulte tes quetes"
+    description: "Fais &6/quete &7pour voir les quetes disponibles."
+    bossbar: "Consulte tes quetes avec &e/quete"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["quete", "quetes"]}
+
+  - id: animaux
+    title: "&eVisite les animaux"
+    description: "Fais &6/warp Animaux &7pour t'y rendre."
+    bossbar: "Rends-toi au warp &e/warp Animaux"
+    reward: 5000
+    conditions:
+      - {type: WARP, commands: ["warp animaux", "warps animaux"]}
+
+  - id: ob
+    title: "&eMenu OneBlock"
+    description: "Fais &6/ob &7pour gerer ton ile."
+    bossbar: "Gere ton ile avec &e/ob"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["ob"]}
+
+  - id: discord
+    title: "&eRejoins le Discord"
+    description: "Fais &6/discord &7pour rejoindre la communaute."
+    bossbar: "Rejoins le Discord avec &e/discord"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["discord"]}
+
+  - id: parchemins
+    title: "&eLes parchemins"
+    description: "Fais &6/parchemins &7pour decouvrir les parchemins."
+    bossbar: "Decouvre les parchemins avec &e/parchemins"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["parchemins"]}
+
+  - id: rangs
+    title: "&eLes rangs"
+    description: "Fais &6/rangs &7pour decouvrir les rangs du serveur."
+    bossbar: "Decouvre les rangs avec &e/rangs"
+    reward: 5000
+    conditions:
+      - {type: COMMAND, commands: ["rangs"]}

@@ -1,0 +1,23 @@
+name: IvalonaTutoriel
+version: '${version}'
+main: fr.ivalona.tutoriel.TutorielPlugin
+api-version: '26.2'
+authors: [Ivalona]
+description: Cinematique d'arrivee et tutoriel en 10 quetes pour Ivalona
+depend: [Vault]
+softdepend: [Nexo, PlaceholderAPI, CustomNamePlates, Essentials, LuckPerms, Votifier, NuVotifier]
+commands:
+  tutoriel:
+    description: Tutoriel d'Ivalona
+    aliases: [tuto]
+    usage: /tutoriel [skip]
+permissions:
+  tutoriel.use:
+    description: Utiliser /tutoriel
+    default: true
+  tutoriel.admin:
+    description: Commandes d'administration du tutoriel
+    default: op
+  tutoriel.bypass:
+    description: Ne jamais declencher la cinematique ni le tutoriel
+    default: false

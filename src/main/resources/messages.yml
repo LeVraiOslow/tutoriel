@@ -1,0 +1,84 @@
+# ============================================================================
+#  IvalonaTutoriel - messages
+#  Couleurs : &c &b ... &#ff8800 | MiniMessage | glyphs Nexo : <glyph:dollars1>
+#  Variables : {player} {number} {total} {title} {description} {reward} {amount} {prefix}
+#  Chaque "bloc" accepte : chat (liste de lignes), title (title, subtitle, fade-in, stay,
+#  fade-out en ticks), actionbar, sound ("cle;volume;pitch").
+# ============================================================================
+
+prefix: "&8[&6Tutoriel&8] &r"
+
+# Format de la recompense dans les messages ({amount} = 5.000)
+reward-format: "&6{amount} <glyph:dollars1>"
+
+# Annonce d'une nouvelle quete
+quest-start:
+  chat:
+    - ""
+    - "{prefix}&6&lQuete {number}/{total} &8» &e{title}"
+    - "&7{description}"
+    - "&7Recompense : {reward}"
+    - ""
+  title:
+    title: "&6Quete {number}/{total}"
+    subtitle: "&f{title}"
+    fade-in: 10
+    stay: 50
+    fade-out: 10
+  sound: "minecraft:entity.experience_orb.pickup;1.0;1.2"
+
+# Rappel a la reconnexion ou avec /tutoriel
+quest-resume:
+  chat:
+    - "{prefix}&6Quete {number}/{total} &8» &e{title}"
+    - "&7{description}"
+
+# Quete terminee
+quest-complete:
+  chat:
+    - "{prefix}&a&lQuete terminee ! &7{title} &8(+{reward}&8)"
+  title:
+    title: "&a&lQuete terminee !"
+    subtitle: "&7+{reward}"
+    fade-in: 5
+    stay: 35
+    fade-out: 10
+  sound: "minecraft:entity.player.levelup;1.0;1.0"
+
+# Fin du tutoriel
+tutorial-complete:
+  chat:
+    - ""
+    - "{prefix}&a&lTutoriel termine ! &fBon jeu sur &6Ivalona&f !"
+    - ""
+  title:
+    title: "&a&lTutoriel termine !"
+    subtitle: "&eBon jeu sur Ivalona"
+    fade-in: 15
+    stay: 80
+    fade-out: 20
+  sound: "minecraft:ui.toast.challenge_complete;1.0;1.0"
+
+# Juste apres la cinematique, avant la quete 1
+cinematic-end:
+  title:
+    title: "&6&lC'est parti !"
+    subtitle: "&7Suis le tutoriel pour bien demarrer"
+    fade-in: 10
+    stay: 40
+    fade-out: 10
+
+cinematic-skip-hint: "&7Tape &e/tutoriel skip &7pour passer la cinematique"
+
+commands:
+  usage: "{prefix}&7/tutoriel [info|skip] &8| &7admin : reload, start, reset, setstep, complete, vote, cinematic"
+  no-permission: "{prefix}&cTu n'as pas la permission."
+  reloaded: "{prefix}&aConfiguration rechargee."
+  player-not-found: "{prefix}&cJoueur introuvable."
+  skip-none: "{prefix}&cAucune cinematique a passer."
+  not-active: "{prefix}&7Aucun tutoriel en cours."
+  finished: "{prefix}&aTu as deja termine le tutoriel !"
+  done: "{prefix}&aFait."
+  center-set: "{prefix}&aCentre de la cinematique defini a ta position."
+  point-added: "{prefix}&aPoint #{count} ajoute ({seconds}s depuis le point precedent)."
+  points-cleared: "{prefix}&aPoints supprimes : la trajectoire automatique sera utilisee."
