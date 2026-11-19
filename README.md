@@ -4,7 +4,7 @@ Cinématique d'arrivée + tutoriel de 10 quêtes pour Ivalona (Paper 26.2, Java 
 
 ## Installation
 1. Ouvre le dossier dans ton IDE ou lance `gradle build` (le jar est dans `build/libs/`).
-2. Si besoin, adapte `paperVersion` et `javaVersion` dans `gradle.properties` (copie ceux de tes autres plugins).
+2. Si besoin, adapte `paperVersion` et `targetJava` dans `gradle.properties` (copie ceux de tes autres plugins).
 3. Mets le jar dans `plugins/`, démarre le serveur, puis édite `config.yml` et `messages.yml` (`/tutoriel reload`).
 
 Dépendances : **Vault** (obligatoire). Facultatifs : Nexo, PlaceholderAPI (requis par CustomNamePlates), CustomNamePlates, Essentials, LuckPerms, NuVotifier.

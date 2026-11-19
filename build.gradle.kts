@@ -16,7 +16,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:$paperVer")
+    // snakeyaml est fourni par Paper au runtime et n'est pas utilise directement par le plugin :
+    // on l'exclut pour eviter l'erreur "Could not find snakeyaml-2.2.jar" a la compilation.
+    compileOnly("io.papermc.paper:paper-api:$paperVer") {
+        exclude(group = "org.yaml", module = "snakeyaml")
+    }
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("me.clip:placeholderapi:2.11.6")
 }
