@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Paper 26.x exige Java 25 (doit correspondre a targetJava dans gradle.properties)
+      - name: Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
+
+      - name: Build
+        run: gradle build --no-daemon
+
+      - name: Upload du jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: IvalonaTutoriel
+          path: build/libs/*.jar
+          if-no-files-found: error
+
+      # Sur un tag (ex: git tag v1.0.0 && git push --tags), publie le jar dans une release GitHub
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
